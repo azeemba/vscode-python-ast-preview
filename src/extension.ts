@@ -6,7 +6,7 @@ import { execFile } from 'child_process';
 import * as util from 'util';
 let execFileP = util.promisify(execFile);
 
-let fileToText = {};
+let fileToText: {[s: string]: string} = {};
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -25,8 +25,10 @@ export function activate(context: vscode.ExtensionContext) {
         provideTextDocumentContent(uri: vscode.Uri): Thenable<string> {
             // simply invoke cowsay, use uri-path as text
             let config = vscode.workspace.getConfiguration();
+            // @ts-ignore
             let pythonPath:string = config.get("python-ast-preview.pythonPath");
             if (pythonPath === null && config.has("python.pythonPath")) {
+                // @ts-ignore
                 pythonPath = config.get("python.pythonPath");
             }
             else {
@@ -68,7 +70,7 @@ export function activate(context: vscode.ExtensionContext) {
         fileToText[filename + '.json'] = message;
 
         let doc = await vscode.workspace.openTextDocument(uri);
-        let val = await vscode.window.showTextDocument(
+        await vscode.window.showTextDocument(
             doc,
             {
                 preview: false,
