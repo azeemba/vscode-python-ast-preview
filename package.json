@@ -1,38 +1,49 @@
 {
-	"name": "python-ast-preview",
-	"displayName": "Python AST Preview",
-	"description": "Preview the AST of your Python code",
-	"version": "0.0.1",
-	"engines": {
-		"vscode": "^1.29.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onCommand:extension.helloWorld"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
-			}
-		]
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test"
-	},
-	"devDependencies": {
-		"typescript": "^3.1.4",
-		"vscode": "^1.1.25",
-		"tslint": "^5.8.0",
-		"@types/node": "^8.10.25",
-		"@types/mocha": "^2.2.42"
-	}
+    "name": "python-ast-preview",
+    "displayName": "Python AST Preview",
+    "description": "Preview the AST of your Python code",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.29.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:extension.preview-python-ast"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.preview-python-ast",
+                "title": "Preview Python AST"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Python AST Preview Settings",
+            "properties": {
+                "python-ast-preview.pythonPath": {
+                    "type": "string",
+                    "default": null,
+                    "description": "Path to find python. If left blank, tries using python.pythonPath. If that is unavailable, just tries running python"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^3.1.4",
+        "vscode": "^1.1.25",
+        "tslint": "^5.8.0",
+        "@types/node": "^8.10.25",
+        "@types/mocha": "^2.2.42"
+    }
 }
