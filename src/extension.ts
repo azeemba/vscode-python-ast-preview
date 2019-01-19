@@ -2,9 +2,12 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { execFile } from 'child_process';
+import * as path from 'path';
+import * as fs from 'fs'
 
 import * as util from 'util';
 let execFileP = util.promisify(execFile);
+let accessFsP = util.promisify(fs.access)
 
 let fileToText: {[s: string]: string} = {};
 
@@ -22,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
         onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
         onDidChange = this.onDidChangeEmitter.event;
 
-        provideTextDocumentContent(uri: vscode.Uri): Thenable<string> {
+        async provideTextDocumentContent(uri: vscode.Uri): Promise<string> {
             // simply invoke cowsay, use uri-path as text
             let config = vscode.workspace.getConfiguration();
             // @ts-ignore
@@ -30,6 +33,20 @@ export function activate(context: vscode.ExtensionContext) {
             if (pythonPath === null && config.has("python.pythonPath")) {
                 // @ts-ignore
                 pythonPath = config.get("python.pythonPath");
+                let folders = vscode.workspace.workspaceFolders
+                if (folders !== undefined && folders[0] !== undefined) {
+                    let rootPath = folders[0].uri.fsPath
+                    if (!path.isAbsolute(pythonPath)) {
+                        let absolutePath = path.join(rootPath, pythonPath)
+                        try {
+                            await accessFsP(absolutePath)
+                            pythonPath = absolutePath
+                        }
+                        catch (error) {
+                            // nothing to do
+                        }
+                    }
+                }
             }
             else {
                 pythonPath = "python";
@@ -40,7 +57,8 @@ export function activate(context: vscode.ExtensionContext) {
             delete fileToText[uri.path]
 
             let helperPython = context.asAbsolutePath('helper.py');
-            return execFileP(pythonPath, [helperPython, text]).then(output => output.stdout);
+            const output = await execFileP(pythonPath, [helperPython, text]);
+            return output.stdout;
         }
     }
     let docDisposable = vscode.workspace.registerTextDocumentContentProvider(
