@@ -3,13 +3,20 @@
     "displayName": "Python AST Preview",
     "description": "Preview the AST of your Python code",
     "publisher": "azeemba",
-    "repository": "https://github.com/azeemba/vscode-python-ast-preview",
-    "version": "0.0.1",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/azeemba/vscode-python-ast-preview"
+    },
+    "version": "0.0.2",
+    "license": "MIT",
+    "keywords": ["Python", "AST"],
+    "icon": "python-ast-icon.png",
     "engines": {
         "vscode": "^1.29.0"
     },
     "categories": [
-        "Other"
+        "Other",
+        "Programming Languages"
     ],
     "activationEvents": [
         "onCommand:extension.preview-python-ast"
