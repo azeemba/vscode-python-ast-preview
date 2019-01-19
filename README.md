@@ -1,4 +1,5 @@
-# python-ast-preview README
+Python AST Preview in VSCode
+============================
 
 Quick and dirty way to see the AST of your active file in VSCode.
 
